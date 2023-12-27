@@ -1,0 +1,30 @@
+spring:
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:db;DB_CLOSE_DELAY=-1;IGNORECASE=TRUE
+    username: sa
+    password: sa
+
+  #    driver-class-name: com.mysql.cj.jdbc.Driver
+  #    url: jdbc:mysql://localhost/empay?autoReconnect=true&useSSL=false
+  #    username: user
+  #    password: pass123
+
+
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: create
+
+    properties:
+      hibernate:
+        hbm2ddl:
+          import_files: nomenclature-data.sql,demo-data.sql
+
+logging:
+  level:
+    org.springframework: ERROR
+    org.springframework.security: INFO
+    #    org.hibernate.SQL: DEBUG
+    #    org.hibernate.orm.jdbc.bind: TRACE
+    com.example: INFO
