@@ -38,18 +38,4 @@ public abstract class AbstractAuditableEntity {
     @LastModifiedDate
     @Column(precision = Constants.TIMESTAMP_PRECISION)
     private ZonedDateTime lastModifiedDate;
-
-    /**
-     * The user who last modified this entity.
-     */
-    @LastModifiedBy
-    @ManyToOne
-    private UserLogin lastModifiedBy;
-
-    /**
-     * The user who created this entity.
-     */
-    @CreatedBy
-    @ManyToOne
-    private UserLogin createdBy;
 }

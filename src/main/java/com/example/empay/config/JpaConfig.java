@@ -30,30 +30,6 @@ public class JpaConfig {
     private EntityManager entityManager;
 
     /**
-     * Create a bean that returns the currently logged-in user for auditing purposes.
-     *
-     * @return An AuditorAware instance.
-     */
-    @Bean
-    public AuditorAware<UserLogin> auditorAware() {
-        return () -> {
-            if (SecurityContextHolder.getContext().getAuthentication()
-                    != null) {
-                Object principal =
-                        SecurityContextHolder.getContext().getAuthentication()
-                                .getPrincipal();
-                if (principal instanceof EmpayUserDetails) {
-                    EmpayUserDetails userDetails = (EmpayUserDetails) principal;
-                    return Optional.of(
-                            entityManager.getReference(UserLogin.class,
-                                    userDetails.getUserLoginId()));
-                }
-            }
-            return Optional.empty();
-        };
-    }
-
-    /**
      * Provides <code>ZonedDateTime</code> in UTC timezone for JPA entity
      * auditing purposes.
      *

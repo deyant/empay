@@ -74,14 +74,6 @@ public class MerchantDto {
      */
     private ZonedDateTime lastModifiedDate;
     /**
-     * Created by user.
-     */
-    private UserDto createdBy;
-    /**
-     * Last modified by user.
-     */
-    private UserDto lastModifiedBy;
-    /**
      * Version number for optimistic locking.
      */
     private Integer version;

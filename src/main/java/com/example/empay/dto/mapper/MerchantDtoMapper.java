@@ -34,9 +34,6 @@ public final class MerchantDtoMapper {
                 .setTotalTransactionSum(merchant.getTotalTransactionSum())
                 .setCreatedDate(merchant.getCreatedDate())
                 .setLastModifiedDate(merchant.getLastModifiedDate())
-                .setCreatedBy(merchant.getCreatedBy() != null ? UserDtoMapper.toDto(merchant.getCreatedBy()) : null)
-                .setLastModifiedBy(
-                        merchant.getLastModifiedBy() != null ? UserDtoMapper.toDto(merchant.getLastModifiedBy()) : null)
                 .setVersion(merchant.getVersion());
     }
 

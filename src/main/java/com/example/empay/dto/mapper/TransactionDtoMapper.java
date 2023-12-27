@@ -37,11 +37,6 @@ public final class TransactionDtoMapper {
                 .setReferenceId(transaction.getReferenceId())
                 .setCreatedDate(transaction.getCreatedDate())
                 .setLastModifiedDate(transaction.getLastModifiedDate())
-                .setCreatedBy(
-                        transaction.getCreatedBy() != null ? UserDtoMapper.toDto(transaction.getCreatedBy()) : null)
-                .setLastModifiedBy(
-                        transaction.getLastModifiedBy() != null ? UserDtoMapper.toDto(transaction.getLastModifiedBy())
-                                : null)
                 .setVersion(transaction.getVersion());
 
         if (transaction.getBelongsToTransaction() != null) {
