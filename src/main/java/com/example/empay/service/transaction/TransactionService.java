@@ -245,7 +245,7 @@ public class TransactionService {
         if (chargeTransaction.getAmount().compareTo(transaction.getAmount()) == -1) {
             transaction.setStatus(transactionStatusTypeRepository.getReferenceById(ERROR.toString()));
             transaction.setErrorReason(
-                    "Amount of the REFUND transaction is greater than the amount of the CHARGE" + "transaction");
+                    "Amount of the REFUND transaction is greater than the amount of the CHARGE transaction");
 
             return;
         }
@@ -261,7 +261,7 @@ public class TransactionService {
         if (merchant.getTotalTransactionSum().compareTo(transaction.getAmount()) == -1) {
             transaction.setStatus(transactionStatusTypeRepository.getReferenceById(ERROR.toString()));
             transaction.setErrorReason(
-                    "Merchant's total transaction sum is less than the REFUND transaction's " + "amount");
+                    "Merchant's total transaction sum is less than the REFUND transaction's  amount");
 
             return;
         }
