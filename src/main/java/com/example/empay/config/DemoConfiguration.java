@@ -4,13 +4,14 @@ import com.example.empay.repository.security.UserLoginRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 /**
- * Print instructions how to use this application when started in DEV profile.
+ * Print instructions how to use this application when started. Do not use in production, only used for demo purposes.
  */
-//@Profile("dev")
+@Profile("!cli")
 @Component
 @Slf4j
 public class DemoConfiguration {
@@ -34,9 +35,8 @@ public class DemoConfiguration {
         log.info("******************************************************");
         log.info("*                Available users:                    *");
         log.info("******************************************************");
-        userLoginRepository.findAll().forEach(it -> {
-            log.info("Username: {}\t\tpassword: {}", it.getUsername(), "pass123");
-        });
+        userLoginRepository.findAll().forEach(it ->
+                log.info("Username: {}\t\tpassword: {}", it.getUsername(), "pass123"));
         log.info("******************************************************");
 
     }

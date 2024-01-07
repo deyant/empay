@@ -2,9 +2,9 @@ package com.example.empay;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.quartz.QuartzAutoConfiguration;
 
-@SuppressWarnings("checkstyle:FinalClass")
-@SpringBootApplication
+@SpringBootApplication(exclude = { QuartzAutoConfiguration.class })
 public class EmpayApplication {
     /**
      * Run the application from a command line.
