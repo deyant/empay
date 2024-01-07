@@ -1,6 +1,5 @@
 package com.example.empay.dto.merchant;
 
-import com.example.empay.dto.security.UserDto;
 import com.example.empay.util.Constants;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

@@ -1,6 +1,5 @@
 package com.example.empay.dto.transaction;
 
-import com.example.empay.dto.security.UserDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
