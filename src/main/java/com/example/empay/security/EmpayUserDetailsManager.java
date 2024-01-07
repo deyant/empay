@@ -31,7 +31,7 @@ public class EmpayUserDetailsManager implements UserDetailsManager, UserDetailsP
      * @param user        the user to modify the password for
      * @param newPassword the password to change to, encoded by the configured
      *                    {@code PasswordEncoder}
-     * @return
+     * @return The updated user details.
      */
     @Override
     public UserDetails updatePassword(final UserDetails user, final String newPassword) {
@@ -103,7 +103,7 @@ public class EmpayUserDetailsManager implements UserDetailsManager, UserDetailsP
      */
     @Override
     public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-        return EmpayUserDetails.fromUserLogin(userLoginRepository.findByUsername(username).orElseThrow(
+        return new EmpayUserDetails(userLoginRepository.findByUsername(username).orElseThrow(
                 () -> new UsernameNotFoundException(String.format("User [%s] does not exist.", username))));
 
     }

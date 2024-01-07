@@ -6,12 +6,12 @@ import com.example.empay.util.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.AbstractUserDetailsAuthenticationProvider;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsPasswordService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -34,13 +34,7 @@ public class EmpayAuthenticationProvider extends AbstractUserDetailsAuthenticati
     /**
      * The password encoder for this application.
      */
-    private PasswordEncoder passwordEncoder;
-
-    /**
-     * The user details password service for this application.
-     */
-    @Autowired
-    private UserDetailsPasswordService userDetailsPasswordService;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * Used in case of unsuccessful authentication to mitigate timing attacks.
@@ -72,7 +66,7 @@ public class EmpayAuthenticationProvider extends AbstractUserDetailsAuthenticati
      * @param authentication The authentication request, which subclasses <em>may</em>
      *                       need to perform a binding-based retrieval of the <code>UserDetails</code>
      * @return User details for the specified username.
-     * @throws AuthenticationException
+     * @throws AuthenticationException If authentication cannot proceed.
      */
     protected UserDetails retrieveUser(final String username, final UsernamePasswordAuthenticationToken authentication)
             throws AuthenticationException {
@@ -84,7 +78,14 @@ public class EmpayAuthenticationProvider extends AbstractUserDetailsAuthenticati
             throw new UsernameNotFoundException(String.format("Failed login for user [%s]", username));
         }
 
-        EmpayUserDetails loadedUser = EmpayUserDetails.fromUserLogin(userLogin.get());
+        String presentedPassword = authentication.getCredentials().toString();
+        if (!this.passwordEncoder.matches(presentedPassword, userLogin.get().getCurrentPassword())) {
+            log.debug("Failed to authenticate since password does not match stored value");
+            throw new BadCredentialsException(this.messages
+                    .getMessage("AbstractUserDetailsAuthenticationProvider.badCredentials", "Bad credentials"));
+        }
+
+        EmpayUserDetails loadedUser = new EmpayUserDetails(userLogin.get());
         this.getPreAuthenticationChecks().check(loadedUser);
         additionalAuthenticationChecks(loadedUser, authentication);
         this.getPostAuthenticationChecks().check(loadedUser);
@@ -98,7 +99,7 @@ public class EmpayAuthenticationProvider extends AbstractUserDetailsAuthenticati
      *                       {@link #retrieveUser(String, UsernamePasswordAuthenticationToken)} or
      *                       <code>UserCache</code>
      * @param authentication the current request that needs to be authenticated
-     * @throws AuthenticationException
+     * @throws AuthenticationException If authentication cannot proceed.
      */
     @Override
     protected void additionalAuthenticationChecks(final UserDetails userDetails,
