@@ -51,9 +51,8 @@
 
     <!-- https://checkstyle.org/filters/suppressionfilter.html -->
     <module name="SuppressionFilter">
-        <property name="file" value="${org.checkstyle.sun.suppressionfilter.config}"
-                  default="checkstyle-suppressions.xml" />
-        <property name="optional" value="true"/>
+        <property name="file" value="${config_loc}/suppressions.xml" />
+        <property name="optional" value="false"/>
     </module>
 
     <!-- Checks that a package-info.java file exists for each package.     -->
@@ -163,10 +162,6 @@
         <!-- See https://checkstyle.org/checks/coding/index.html -->
         <module name="EmptyStatement"/>
         <module name="EqualsHashCode"/>
-        <module name="HiddenField" >
-            <property name="ignoreSetter" value="true" />
-            <property name="ignoreConstructorParameter" value="true" />
-        </module>
 
         <module name="IllegalInstantiation"/>
         <module name="InnerAssignment"/>
