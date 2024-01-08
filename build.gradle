@@ -5,6 +5,7 @@ plugins {
     id 'org.hibernate.orm' version '6.3.1.Final'
     id 'org.graalvm.buildtools.native' version '0.9.28'
     id 'checkstyle'
+    id 'jacoco'
 }
 
 group = 'com.example'
@@ -65,3 +66,14 @@ tasks.withType(Checkstyle) {
     }
 }
 
+test {
+    finalizedBy jacocoTestReport
+}
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required = false
+        csv.required = false
+        html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+    }
+}
