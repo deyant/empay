@@ -12,6 +12,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
 /**
  * Reference (nomenclature) entity for types of a transaction.
@@ -21,6 +22,7 @@ import lombok.ToString;
 @Setter
 @ToString(of = {"id", "name"})
 @EqualsAndHashCode(of = {"id"})
+@Accessors(chain = true)
 public class TransactionType {
 
     /**

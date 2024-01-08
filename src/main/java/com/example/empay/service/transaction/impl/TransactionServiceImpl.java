@@ -46,9 +46,57 @@ import static com.example.empay.entity.transaction.TransactionStatusType.TYPE.RE
 public class TransactionServiceImpl implements TransactionService {
 
     /**
+     * Error message used when a related transaction belongs to another merchant.
+     */
+    public static final String ERROR_MESSAGE_TRANSACTION_BELONGS_ANOTHER_MERCHANT =
+            "The parent transaction belongs to a different merchant.";
+
+    /**
+     * Error message used when a merchant is not active.
+     */
+    public static final String ERROR_MESSAGE_MERCHANT_NOT_ACTIVE = "Merchant not active.";
+
+    /**
+     * Error message used when trying to refund a charge transaction that is not in status APPROVED.
+     */
+    public static final String ERROR_REASON_CANNOT_REFUND_CHARGE_TRANSACTION_IN_STATUS =
+            "Cannot refund a CHARGE transaction in status ";
+
+    /**
+     * Error message used when trying to reverse an authorize transaction that is not in status APPROVED.
+     */
+    public static final String ERROR_REASON_CANNOT_REVERSE_AUTHORIZE_TRANSACTION_IN_STATUS =
+            "Cannot reverse an AUTHORIZE transaction in status ";
+
+    /**
+     * Error message used when trying to refund a transaction that is not of type CHARGE.
+     */
+    public static final String ERROR_REASON_CANNOT_REFUND_TRANSACTION_OF_TYPE =
+            "Cannot refund a transaction of type ";
+
+    /**
+     * Error message used when trying to reverse a transaction that is not of type AUTHORIZE.
+     */
+    public static final String ERROR_REASON_CANNOT_REVERSE_TRANSACTION_OF_TYPE =
+            "Cannot reverse a transaction of type ";
+
+    /**
+     * Error message used when trying to refund a greater amount than charged.
+     */
+    public static final String ERROR_REASON_REFUND_TRANSACTION_AMOUNT_GREATER_THAN_CHARGED =
+            "Amount of the REFUND transaction is greater than the amount of the CHARGE transaction";
+
+    /**
+     * Error message used when trying to refund a greater amount than the total merchant's funds.
+     */
+    public static final String ERROR_REASON_REFUND_TRANSACTION_AMOUNT_GREATER_THAN_MERCHANT_TOTAL_SUM =
+            "Merchant's total transaction sum is less than the REFUND transaction's amount";
+
+    /**
      * Constant for merchant ID property of {@link TransactionDto} class.
      */
     private static final String DTO_PROPERTY_MERCHANT_ID = "merchantId";
+
     /**
      * Merchant repository.
      */
@@ -163,18 +211,19 @@ public class TransactionServiceImpl implements TransactionService {
     public TransactionDto add(@NotNull final TransactionCreateRequest transactionCreateRequest,
                               @NotNull final Long merchantId) {
         Merchant merchant = merchantRepository.findById(merchantId).orElseThrow(
-                () -> new TransactionValidationException("Merchant with ID [" + merchantId + "] does" + " not exist"));
+                () -> new TransactionValidationException("Merchant with ID [" + merchantId + "] does not exist"));
 
         Transaction transaction = new Transaction();
         transaction.setCustomerEmail(transactionCreateRequest.getCustomerEmail());
         transaction.setReferenceId(transactionCreateRequest.getReferenceId());
         transaction.setCustomerPhone(transactionCreateRequest.getCustomerPhone());
+        transaction.setAmount(transactionCreateRequest.getAmount());
         transaction.setType(transactionTypeRepository.getReferenceById(transactionCreateRequest.getTypeId()));
         transaction.setMerchant(merchant);
 
         if (!MerchantStatusType.STATUS.ACTIVE.toString().equals(merchant.getStatus().getId())) {
             transaction.setStatus(transactionStatusTypeRepository.getReferenceById(ERROR.toString()));
-            transaction.setErrorReason("Merchant not active.");
+            transaction.setErrorReason(ERROR_MESSAGE_MERCHANT_NOT_ACTIVE);
             return TransactionDtoMapper.toDto(transactionRepository.saveAndFlush(transaction));
         }
         if (TransactionType.TYPE.AUTHORIZE.toString().equals(transaction.getType().getId())) {
@@ -192,7 +241,6 @@ public class TransactionServiceImpl implements TransactionService {
     private void processAuthTransaction(final TransactionCreateRequest transactionCreateRequest,
                                         final Transaction transaction) {
 
-        transaction.setAmount(transactionCreateRequest.getAmount());
         transaction.setStatus(transactionStatusTypeRepository.getReferenceById(APPROVED.toString()));
     }
 
@@ -201,9 +249,8 @@ public class TransactionServiceImpl implements TransactionService {
 
         Merchant merchant = merchantRepository.lockById(transaction.getMerchant().getId()).orElseThrow(
                 () -> new TransactionValidationException(
-                        "Merchant with ID [" + transaction.getMerchant().getId() + "] does" + " not exist"));
+                        "Merchant with ID [" + transaction.getMerchant().getId() + "] does not exist"));
 
-        transaction.setAmount(transactionCreateRequest.getAmount());
         transaction.setStatus(transactionStatusTypeRepository.getReferenceById(APPROVED.toString()));
 
         merchant.setTotalTransactionSum(merchant.getTotalTransactionSum().add(transaction.getAmount()));
@@ -222,34 +269,29 @@ public class TransactionServiceImpl implements TransactionService {
 
 
         if (!transaction.getMerchant().getId().equals(chargeTransaction.getMerchant().getId())) {
-            throw new TransactionValidationException("The parent transaction belongs to a different merchant.");
+            throw new TransactionValidationException(ERROR_MESSAGE_TRANSACTION_BELONGS_ANOTHER_MERCHANT);
         }
         if (!chargeTransaction.getType().getId().equals(TransactionType.TYPE.CHARGE.toString())) {
             transaction.setStatus(transactionStatusTypeRepository.getReferenceById(ERROR.toString()));
-            transaction.setErrorReason("Cannot refund a transaction of type " + chargeTransaction.getType().getId());
+            transaction.setErrorReason(ERROR_REASON_CANNOT_REFUND_TRANSACTION_OF_TYPE
+                    + chargeTransaction.getType().getId());
             return;
         }
 
         if (!chargeTransaction.getStatus().getId().equals(APPROVED.toString())) {
             transaction.setStatus(transactionStatusTypeRepository.getReferenceById(ERROR.toString()));
             transaction.setErrorReason(
-                    "Cannot refund a CHARGE transaction in status " + chargeTransaction.getStatus().getId());
+                    ERROR_REASON_CANNOT_REFUND_CHARGE_TRANSACTION_IN_STATUS + chargeTransaction.getStatus().getId());
 
             return;
         }
 
-        transaction.setAmount(transactionCreateRequest.getAmount());
         if (chargeTransaction.getAmount().compareTo(transaction.getAmount()) < 0) {
             transaction.setStatus(transactionStatusTypeRepository.getReferenceById(ERROR.toString()));
-            transaction.setErrorReason(
-                    "Amount of the REFUND transaction is greater than the amount of the CHARGE transaction");
+            transaction.setErrorReason(ERROR_REASON_REFUND_TRANSACTION_AMOUNT_GREATER_THAN_CHARGED);
 
             return;
         }
-
-
-        chargeTransaction.setStatus(transactionStatusTypeRepository.getReferenceById(REFUNDED.toString()));
-        transactionRepository.save(chargeTransaction);
 
         Merchant merchant = merchantRepository.lockById(transaction.getMerchant().getId()).orElseThrow(
                 () -> new TransactionValidationException(
@@ -257,11 +299,14 @@ public class TransactionServiceImpl implements TransactionService {
 
         if (merchant.getTotalTransactionSum().compareTo(transaction.getAmount()) < 0) {
             transaction.setStatus(transactionStatusTypeRepository.getReferenceById(ERROR.toString()));
-            transaction.setErrorReason(
-                    "Merchant's total transaction sum is less than the REFUND transaction's amount");
+            transaction.setErrorReason(ERROR_REASON_REFUND_TRANSACTION_AMOUNT_GREATER_THAN_MERCHANT_TOTAL_SUM);
 
             return;
         }
+
+        chargeTransaction.setStatus(transactionStatusTypeRepository.getReferenceById(REFUNDED.toString()));
+        transactionRepository.save(chargeTransaction);
+
         transaction.setStatus(transactionStatusTypeRepository.getReferenceById(APPROVED.toString()));
         transactionRepository.save(transaction);
 
@@ -281,22 +326,23 @@ public class TransactionServiceImpl implements TransactionService {
                         "Transaction with ID [ " + chargeTransactionId + "] does not exist."));
 
         if (!transaction.getMerchant().getId().equals(authTransaction.getMerchant().getId())) {
-            throw new TransactionValidationException("The parent transaction belongs to a different merchant.");
+            throw new TransactionValidationException(ERROR_MESSAGE_TRANSACTION_BELONGS_ANOTHER_MERCHANT);
         }
 
         if (!authTransaction.getType().getId().equals(TransactionType.TYPE.AUTHORIZE.toString())) {
             transaction.setStatus(transactionStatusTypeRepository.getReferenceById(ERROR.toString()));
-            transaction.setErrorReason("Cannot reverse a transaction of type " + authTransaction.getType().getId());
+            transaction.setErrorReason(ERROR_REASON_CANNOT_REVERSE_TRANSACTION_OF_TYPE + authTransaction.getType().getId());
             return;
         }
 
         if (!authTransaction.getStatus().getId().equals(APPROVED.toString())) {
             transaction.setStatus(transactionStatusTypeRepository.getReferenceById(ERROR.toString()));
             transaction.setErrorReason(
-                    "Cannot reverse a transaction with status " + authTransaction.getStatus().getId());
+                    ERROR_REASON_CANNOT_REVERSE_AUTHORIZE_TRANSACTION_IN_STATUS + authTransaction.getStatus().getId());
             return;
         }
 
+        transaction.setAmount(null); // Reversals do not have amount
         authTransaction.setStatus(transactionStatusTypeRepository.getReferenceById(REVERSED.toString()));
         transactionRepository.save(authTransaction);
 

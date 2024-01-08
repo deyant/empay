@@ -13,6 +13,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
 import java.util.Collection;
 
@@ -24,6 +25,7 @@ import java.util.Collection;
 @Entity
 @ToString(of = {"id", "name"})
 @EqualsAndHashCode(of = {"id"})
+@Accessors(chain = true)
 public class MerchantIdentifierType {
 
     /**
