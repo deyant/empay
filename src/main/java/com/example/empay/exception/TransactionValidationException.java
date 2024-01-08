@@ -9,7 +9,7 @@ public class TransactionValidationException extends RuntimeException {
     /**
      * Constructor with a message.
      *
-     * @param message Exceptio message.
+     * @param message Exception message.
      */
     public TransactionValidationException(final String message) {
         super(message);
