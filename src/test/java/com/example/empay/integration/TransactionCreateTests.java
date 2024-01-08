@@ -195,7 +195,7 @@ public class TransactionCreateTests {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.status.id").value(TransactionStatusType.TYPE.ERROR.toString()))
                 .andExpect(jsonPath("$.errorReason")
-                        .value("Amount of the REFUND transaction is greater than the amount of the CHARGE" +
+                        .value("Amount of the REFUND transaction is greater than the amount of the CHARGE " +
                                 "transaction"));
 
         merchant = merchantRepository.findById(2L).orElseThrow(() ->
