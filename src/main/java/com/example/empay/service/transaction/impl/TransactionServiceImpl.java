@@ -331,7 +331,8 @@ public class TransactionServiceImpl implements TransactionService {
 
         if (!authTransaction.getType().getId().equals(TransactionType.TYPE.AUTHORIZE.toString())) {
             transaction.setStatus(transactionStatusTypeRepository.getReferenceById(ERROR.toString()));
-            transaction.setErrorReason(ERROR_REASON_CANNOT_REVERSE_TRANSACTION_OF_TYPE + authTransaction.getType().getId());
+            transaction.setErrorReason(ERROR_REASON_CANNOT_REVERSE_TRANSACTION_OF_TYPE
+                    + authTransaction.getType().getId());
             return;
         }
 
