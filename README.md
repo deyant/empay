@@ -11,6 +11,35 @@ manage merchants and perform payment card transactions.
 $ ./gradlew bootRun
 ```
 
+# Build
+```
+$ ./gradlew build
+```
+
+# Build reports
+- Checkstyle
+```
+<PROJECT_ROOT>/build/reports/checkstyle/main.html
+```
+- Jacoco test coverage report:
+```
+<PROJECT_ROOT>/build/jacocoHtml/index.html
+```
+- Unit & integration tests 
+```
+<PROJECT_ROOT>/build/tests/test/index.html
+```
+
+# Docker image
+```
+$ docker build . -t empay:latest
+```
+
+# Docker Compose with PostgreSQL
+
+```
+$ docker-compose -f docker/compose-postgresql.yaml up
+```
 # Demo data
 The application starts H2 in-memory database and populates it with demo data when started.
 Follow the instructions in the console to login. 

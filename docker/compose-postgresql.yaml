@@ -1,0 +1,21 @@
+services:
+  postgreDb:
+    image: 'postgres:latest'
+    environment:
+      - 'POSTGRES_DB=empay'
+      - 'POSTGRES_PASSWORD=secret123'
+      - 'POSTGRES_USER=empay'
+    ports:
+      - '5432'
+
+  empay:
+    depends_on:
+      - postgreDb
+    image: 'empay:latest'
+    environment:
+      - 'SPRING_DATASOURCE_driver-class-name=org.postgresql.Driver'
+      - 'SPRING_DATASOURCE_URL=jdbc:postgresql://postgreDb:5432/empay'
+      - 'SPRING_DATASOURCE_USERNAME=empay'
+      - 'SPRING_DATASOURCE_PASSWORD=secret123'
+    ports:
+      - '8080:8080'
