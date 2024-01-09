@@ -5,10 +5,10 @@ spring:
     username: sa
     password: sa
 
-  #    driver-class-name: com.mysql.cj.jdbc.Driver
-  #    url: jdbc:mysql://localhost/empay?autoReconnect=true&useSSL=false
-  #    username: user
-  #    password: pass123
+#    driver-class-name: org.postgresql.Driver
+#    url: jdbc:postgresql://localhost:5432/empay
+#    username: empay
+#    password: secret123
 
 
   jpa:
