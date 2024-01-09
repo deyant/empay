@@ -33,7 +33,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -102,7 +101,7 @@ public class TransactionController {
      * @param userDetails              Authentication details of the currently logged user.
      * @return Response with the created transaction.
      */
-    @PutMapping
+    @PostMapping
     @PreAuthorize("hasRole('ROLE_MERCHANT')")
     @Operation(summary = "Create a new transaction for the merchant of the currently logged in user with role "
             + "MERCHANT.")

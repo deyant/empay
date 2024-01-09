@@ -85,7 +85,7 @@ public class MerchantTests {
                   "identifierValue" : "001122334455"
                 }
                 """;
-        this.mockMvc.perform(put("/api/v1/merchant")
+        this.mockMvc.perform(post("/api/v1/merchant")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonContent))
                 .andDo(print())
@@ -106,7 +106,7 @@ public class MerchantTests {
                   }
                 }
                 """;
-        this.mockMvc.perform(put("/api/v1/merchant")
+        this.mockMvc.perform(post("/api/v1/merchant")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonContent))
                 .andDo(print())
@@ -125,7 +125,7 @@ public class MerchantTests {
                   }
                 }
                 """;
-        this.mockMvc.perform(put("/api/v1/merchant")
+        this.mockMvc.perform(post("/api/v1/merchant")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonContent))
                 .andDo(print())
@@ -150,7 +150,7 @@ public class MerchantTests {
                   "identifierValue" : "1111111111"
                 }
                 """;
-        this.mockMvc.perform(put("/api/v1/merchant")
+        this.mockMvc.perform(post("/api/v1/merchant")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonContent))
                 .andDo(print())
@@ -171,7 +171,7 @@ public class MerchantTests {
                   }
                 }
                 """;
-        this.mockMvc.perform(put("/api/v1/merchant")
+        this.mockMvc.perform(post("/api/v1/merchant")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonContent))
                 .andDo(print())
@@ -196,7 +196,7 @@ public class MerchantTests {
                   "identifierValue" : "1234567890"
                 }
                 """;
-        this.mockMvc.perform(put("/api/v1/merchant")
+        this.mockMvc.perform(post("/api/v1/merchant")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonContent))
                 .andDo(print())
@@ -238,7 +238,7 @@ public class MerchantTests {
                   "totalTransactionSum" : "999.99" 
                 }
                 """;
-        this.mockMvc.perform(post("/api/v1/merchant/2")
+        this.mockMvc.perform(put("/api/v1/merchant/2")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonContent))
                 .andDo(print())

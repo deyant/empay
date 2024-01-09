@@ -27,7 +27,7 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -64,7 +64,7 @@ public class TransactionCreateTests {
                   "customerPhone" : "+123456"
                 }
                 """;
-        this.mockMvc.perform(put("/api/v1/transaction")
+        this.mockMvc.perform(post("/api/v1/transaction")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonContent))
                 .andDo(print())
@@ -86,7 +86,7 @@ public class TransactionCreateTests {
                   "referenceId" : "ABC111111"
                 }
                 """;
-        this.mockMvc.perform(put("/api/v1/transaction")
+        this.mockMvc.perform(post("/api/v1/transaction")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonContent))
                 .andDo(print())
@@ -121,7 +121,7 @@ public class TransactionCreateTests {
                 """;
 
         BigDecimal transactionAmount = new BigDecimal("55.55");
-        this.mockMvc.perform(put("/api/v1/transaction")
+        this.mockMvc.perform(post("/api/v1/transaction")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonContent))
                 .andDo(print())
@@ -150,7 +150,7 @@ public class TransactionCreateTests {
                   "belongsToTransactionId" : "6f683d71-dbcc-41ed-b552-51130c00852c"
                 }
                 """;
-        this.mockMvc.perform(put("/api/v1/transaction")
+        this.mockMvc.perform(post("/api/v1/transaction")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonContent))
                 .andDo(print())
@@ -187,7 +187,7 @@ public class TransactionCreateTests {
                   "belongsToTransactionId" : "6f683d71-dbcc-41ed-b552-51130c00852c"
                 }
                 """;
-        this.mockMvc.perform(put("/api/v1/transaction")
+        this.mockMvc.perform(post("/api/v1/transaction")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonContent))
                 .andDo(print())
@@ -223,7 +223,7 @@ public class TransactionCreateTests {
                   "belongsToTransactionId" : "3d7ae6ed-c794-47d4-ad11-7b0f53f09d6b"
                 }
                 """;
-        this.mockMvc.perform(put("/api/v1/transaction")
+        this.mockMvc.perform(post("/api/v1/transaction")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonContent))
                 .andDo(print())
@@ -246,7 +246,7 @@ public class TransactionCreateTests {
                   "belongsToTransactionId" : "d2b2a551-fab6-4731-920e-566306cdd295"
                 }
                 """;
-        this.mockMvc.perform(put("/api/v1/transaction")
+        this.mockMvc.perform(post("/api/v1/transaction")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonContent))
                 .andDo(print())
@@ -268,7 +268,7 @@ public class TransactionCreateTests {
                   "belongsToTransactionId" : "0f45e032-a74f-434f-b00e-e392ab340ab9"
                 }
                 """;
-        this.mockMvc.perform(put("/api/v1/transaction")
+        this.mockMvc.perform(post("/api/v1/transaction")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonContent))
                 .andDo(print())
@@ -290,7 +290,7 @@ public class TransactionCreateTests {
                   "belongsToTransactionId" : "3d7ae6ed-c794-47d4-ad11-7b0f53f09d6b"
                 }
                 """;
-        this.mockMvc.perform(put("/api/v1/transaction")
+        this.mockMvc.perform(post("/api/v1/transaction")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonContent))
                 .andDo(print())
@@ -317,7 +317,7 @@ public class TransactionCreateTests {
                   "belongsToTransactionId" : "3d7ae6ed-c794-47d4-ad11-7b0f53f09d6b"
                 }
                 """;
-        this.mockMvc.perform(put("/api/v1/transaction")
+        this.mockMvc.perform(post("/api/v1/transaction")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonContent))
                 .andDo(print())
@@ -336,7 +336,7 @@ public class TransactionCreateTests {
                   "customerPhone" : "+123456"
                 }
                 """;
-        this.mockMvc.perform(put("/api/v1/transaction")
+        this.mockMvc.perform(post("/api/v1/transaction")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonContent))
                 .andDo(print())
@@ -355,7 +355,7 @@ public class TransactionCreateTests {
                   "customerPhone" : "+123456"
                 }
                 """;
-        this.mockMvc.perform(put("/api/v1/transaction")
+        this.mockMvc.perform(post("/api/v1/transaction")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonContent))
                 .andDo(print())

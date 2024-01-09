@@ -125,7 +125,7 @@ public class MerchantController {
      * @return Response with the created merchant.
      */
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PutMapping
+    @PostMapping
     @Operation(summary = "Create a new merchant.")
     @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Successful operation", content = {
             @Content(schema = @Schema(implementation = MerchantDto.class))}),
@@ -153,7 +153,7 @@ public class MerchantController {
      * @return Response with the updated merchant.
      */
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     @Operation(summary = "Update a merchant.")
     @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Successful operation", content = {
             @Content(schema = @Schema(implementation = MerchantDto.class))}),
