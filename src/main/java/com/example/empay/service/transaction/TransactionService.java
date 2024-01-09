@@ -7,6 +7,7 @@ import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
 
+import java.time.ZonedDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,6 +23,14 @@ public interface TransactionService {
      * @return Optional value of a {@code TransactionDto}.
      */
     Optional<TransactionDto> getById(@NotNull UUID id);
+
+    /**
+     * Delete transactions older than a specified date.
+     *
+     * @param dateBefore The date before which all transactions will be deleted.
+     * @return Number of transactions deleted.
+     */
+    int deleteOldTransactions(@NotNull ZonedDateTime dateBefore);
 
     /**
      * Find transactions by a combination of search criteria.

@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -135,6 +136,16 @@ public class TransactionServiceImpl implements TransactionService {
     public Optional<TransactionDto> getById(@NotNull final UUID id) {
         Optional<Transaction> transaction = transactionRepository.findById(id);
         return transaction.map(TransactionDtoMapper::toDto);
+    }
+
+    /**
+     * Delete transactions older than a specified date.
+     *
+     * @param dateBefore The date before which all transactions will be deleted.
+     * @return Number of transactions deleted.
+     */
+    public int deleteOldTransactions(@NotNull final ZonedDateTime dateBefore) {
+        return transactionRepository.deleteAllByCreatedDateBefore(dateBefore);
     }
 
     /**

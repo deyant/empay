@@ -1,6 +1,6 @@
 package com.example.empay.job;
 
-import com.example.empay.repository.transaction.TransactionRepository;
+import com.example.empay.service.transaction.TransactionService;
 import com.example.empay.util.Constants;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.DisallowConcurrentExecution;
@@ -24,10 +24,10 @@ import java.time.temporal.ChronoUnit;
 public class DeleteOldTransactionsJob implements Job {
 
     /**
-     * Transaction repository.
+     * Transaction service.
      */
     @Autowired
-    private TransactionRepository transactionRepository;
+    private TransactionService transactionService;
 
     /**
      * Maximum age in hours of transactions. All transactions older than this age
@@ -46,7 +46,7 @@ public class DeleteOldTransactionsJob implements Job {
     public void execute(final JobExecutionContext context) throws JobExecutionException {
         ZonedDateTime dateBefore = ZonedDateTime.now(Constants.ZONE_ID_UTC).minus(maxAgeInHours, ChronoUnit.HOURS);
         try {
-            int deletedCount = transactionRepository.deleteAllByCreatedDateBefore(dateBefore);
+            int deletedCount = transactionService.deleteOldTransactions(dateBefore);
             log.info("Deleted {} transactions created before {}", deletedCount, dateBefore);
         } catch (Exception e) {
             log.error("Error while deleting transactions older than {}", dateBefore, e);
